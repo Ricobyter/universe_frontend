@@ -8,6 +8,7 @@ import ContactDetailsSection from "../../components/universityInfo/ContactDetail
 import DescriptionSection from "../../components/universityInfo/DescriptionSection";
 import SimilarInstitutionsSection from "../../components/universityInfo/SimilarInstitutionsSection";
 import UserReviewsSection from "../../components/universityInfo/UserReviewsSection";
+import { api } from "../../config/api";
 
 export default function UniversityInfo() {
   const { id } = useParams();
