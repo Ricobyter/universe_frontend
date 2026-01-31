@@ -34,7 +34,7 @@ export default function Users() {
       if (searchTerm) params.append('search', searchTerm);
       if (filterRole) params.append('role', filterRole);
 
-      const response = await fetch(`http://localhost:3000/api/admin/users?${params}`, {
+      const response = await fetch(`${api.admin.users}?${params}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

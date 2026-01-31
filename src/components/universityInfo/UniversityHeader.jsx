@@ -20,7 +20,7 @@ export default function UniversityHeader({ university, darkMode }) {
       const token = localStorage.getItem('token');
       if (!token) return;
 
-      const response = await fetch(`http://localhost:3000/api/users/saved/${university._id}`, {
+      const response = await fetch(api.users.checkSaved(university._id), {
         headers: {
           'Authorization': `Bearer ${token}`
         }

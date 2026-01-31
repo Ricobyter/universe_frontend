@@ -79,7 +79,7 @@ export default function UniversityForm() {
         }
       });
 
-      const response = await fetch("http://localhost:3000/api/universities", {
+      const response = await fetch(api.universities.create, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`

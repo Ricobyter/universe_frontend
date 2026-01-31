@@ -24,7 +24,7 @@ export default function Reviews() {
       }
 
       // Fetch recent reviews
-      const recentRes = await fetch('http://localhost:3000/api/admin/recent-reviews?limit=6', {
+      const recentRes = await fetch(`${api.admin.recentReviews}?limit=6`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -33,7 +33,7 @@ export default function Reviews() {
       setRecentReviews(Array.isArray(recentData) ? recentData : []);
 
       // Fetch popular reviews (most helpful)
-      const popularRes = await fetch('http://localhost:3000/api/admin/popular-reviews?limit=6', {
+      const popularRes = await fetch(`${api.admin.popularReviews}?limit=6`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

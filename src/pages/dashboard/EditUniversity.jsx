@@ -53,7 +53,7 @@ export default function EditUniversity() {
         return;
       }
 
-      const response = await fetch(`http://localhost:3000/api/universities/${id}`, {
+      const response = await fetch(api.universities.getById(id), {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -159,7 +159,7 @@ export default function EditUniversity() {
         }
       });
 
-      const response = await fetch(`http://localhost:3000/api/universities/${id}`, {
+      const response = await fetch(api.universities.getById(id), {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`

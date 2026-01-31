@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import FilterSidebar from "../../components/searchResults/FilterSidebar";
 import { FaChevronRight, FaChevronLeft, FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
+import { api } from "../../config/api";
 
 // Stars component renders stars according to rating
 function Stars({ rating }) {

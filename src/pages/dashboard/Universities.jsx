@@ -30,7 +30,7 @@ export default function Universities() {
       }
 
       // Fetch featured universities
-      const featuredRes = await fetch('http://localhost:3000/api/admin/featured-universities', {
+      const featuredRes = await fetch(api.admin.featuredUniversities, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -39,7 +39,7 @@ export default function Universities() {
       setFeaturedUniversities(Array.isArray(featuredData) ? featuredData : []);
 
       // Fetch recent universities
-      const recentRes = await fetch('http://localhost:3000/api/admin/recent-universities?limit=6', {
+      const recentRes = await fetch(`${api.admin.recentUniversities}?limit=6`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -80,7 +80,7 @@ export default function Universities() {
       console.log('Toggling featured for university:', universityId);
       console.log('Token:', token ? 'exists' : 'missing');
       
-      const response = await fetch(`http://localhost:3000/api/admin/universities/${universityId}/toggle-featured`, {
+      const response = await fetch(api.universities.toggleFeatured(universityId), {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,

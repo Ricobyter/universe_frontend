@@ -52,7 +52,7 @@ export default function UserReviewsSection({ universityId, darkMode }) {
       }
 
       const response = await fetch(
-        `http://localhost:3000/api/reviews/${reviewId}/helpful`,
+        api.reviews.markHelpful(reviewId),
         {
           method: 'POST',
           headers: {

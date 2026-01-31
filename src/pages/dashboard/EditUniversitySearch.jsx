@@ -40,7 +40,7 @@ export default function EditUniversitySearch() {
         return;
       }
 
-      const response = await fetch('http://localhost:3000/api/universities?limit=1000', {
+      const response = await fetch(`${api.universities.getAll}?limit=1000`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

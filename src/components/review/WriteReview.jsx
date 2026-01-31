@@ -212,7 +212,7 @@ export default function WriteReviewPage() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3000/api/reviews', {
+      const response = await fetch(api.reviews.create, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
