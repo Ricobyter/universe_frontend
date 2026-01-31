@@ -1,6 +1,10 @@
 // API Configuration
 export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
+// Debug: Log the API URL (remove this after testing)
+console.log('🔗 API_URL:', API_URL);
+console.log('🔧 VITE_API_URL:', import.meta.env.VITE_API_URL);
+
 // API endpoint helper
 export const api = {
   // Auth endpoints
