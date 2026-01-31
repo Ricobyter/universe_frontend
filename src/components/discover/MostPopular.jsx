@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { IoStarOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import { api } from "../../config/api";
 
 function UniversityCard({ image, name, location, stars, id, views }) {
   const navigate = useNavigate();
