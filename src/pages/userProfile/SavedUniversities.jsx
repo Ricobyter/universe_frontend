@@ -20,7 +20,7 @@ export default function SavedUniversities() {
         return;
       }
 
-      const response = await fetch('http://localhost:3000/api/users/saved', {
+      const response = await fetch(api.users.saved, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

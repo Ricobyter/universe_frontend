@@ -45,7 +45,7 @@ export default function UniversityHeader({ university, darkMode }) {
 
     setSavingLoading(true);
     try {
-      const url = `http://localhost:3000/api/users/saved/${university._id}`;
+      const url = api.users.checkSaved(university._id);
       const method = isSaved ? 'DELETE' : 'POST';
 
       const response = await fetch(url, {

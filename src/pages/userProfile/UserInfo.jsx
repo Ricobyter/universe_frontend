@@ -37,7 +37,7 @@ export default function UserInfo() {
       try {
         setReviewsLoading(true);
         const response = await fetch(
-          `http://localhost:3000/api/reviews?user=${id}&sortBy=createdAt&order=desc&limit=20`
+          api.reviews.getByUser(id)
         );
         const data = await response.json();
 

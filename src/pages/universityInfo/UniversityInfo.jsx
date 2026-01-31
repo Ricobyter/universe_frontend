@@ -30,7 +30,7 @@ export default function UniversityInfo() {
 
         // Increment view count
         try {
-          await fetch(`http://localhost:3000/api/universities/${id}/view`, {
+          await fetch(api.universities.recordView(id), {
             method: 'POST'
           });
         } catch (viewErr) {

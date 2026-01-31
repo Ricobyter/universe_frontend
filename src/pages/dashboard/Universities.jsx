@@ -48,7 +48,7 @@ export default function Universities() {
       setRecentUniversities(Array.isArray(recentData) ? recentData : []);
 
       // Fetch popular universities (sorted by rating)
-      const popularRes = await fetch('http://localhost:3000/api/universities?sortBy=rating&order=desc&limit=6');
+      const popularRes = await fetch(`${api.universities.getAll}?sortBy=rating&order=desc&limit=6`);
       const popularData = await popularRes.json();
       setPopularUniversities(popularData.universities || []);
 
