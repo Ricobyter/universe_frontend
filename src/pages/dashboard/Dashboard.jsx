@@ -9,7 +9,6 @@ import UniversitiesTable from "../../components/dashboard/dashboardStats/Univers
 import ReviewsTable from "../../components/dashboard/dashboardStats/ReviewsTable";
 import { LiaUniversitySolid } from "react-icons/lia";
 import { api } from "../../config/api";
-import { api } from "../../config/api";
 
 export default function Dashboard() {
   const [stats, setStats] = useState({
