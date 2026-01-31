@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FaStar, FaThumbsUp, FaReply } from "react-icons/fa";
+import { api } from "../../config/api";
 
 export default function UserReviewsSection({ universityId, darkMode }) {
   const [reviews, setReviews] = useState([]);
@@ -27,8 +28,7 @@ export default function UserReviewsSection({ universityId, darkMode }) {
       }
 
       const response = await fetch(
-        `http://localhost:3000/api/reviews?university=${universityId}&sortBy=${sortBy}&order=${order}&limit=10`
-      );
+          `${api.reviews.getAll}?university=${universityId}&sortBy=${sortBy}&order=${order}&limit=10`
       
       if (response.ok) {
         const data = await response.json();

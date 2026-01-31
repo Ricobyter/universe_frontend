@@ -4,6 +4,7 @@ import AdditionalDetailsForm from "./AdditionalDetailsForm";
 import TagsInput from "./TagsInput";
 import CampusImageUploader from "./CampusImageUploader";
 import ActionButtons from "./ActionButtons";
+import { api } from "../../../config/api";
 
 export default function UniversityForm() {
   const [formData, setFormData] = useState({

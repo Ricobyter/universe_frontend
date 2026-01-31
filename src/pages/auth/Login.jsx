@@ -5,6 +5,7 @@ import { setCredentials } from "../../store/userSlice";
 import { FaRegEye } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa6";
 import { IoMdArrowBack } from "react-icons/io";
+import { api } from "../../config/api";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);

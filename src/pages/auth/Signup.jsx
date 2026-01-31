@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { setCredentials } from "../../store/userSlice";
 import { FaRegEye } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa6";
+import { api } from "../../config/api";
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);

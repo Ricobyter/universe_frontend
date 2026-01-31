@@ -62,7 +62,7 @@ export default function Universities() {
   const fetchAllUniversities = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/api/universities?limit=100', {
+      const response = await fetch(`${api.universities.getAll}?limit=100`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

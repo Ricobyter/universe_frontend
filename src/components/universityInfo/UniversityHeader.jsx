@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaStar, FaShare, FaBookmark, FaRegBookmark } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+import { api } from "../../config/api";
 
 export default function UniversityHeader({ university, darkMode }) {
   const navigate = useNavigate();

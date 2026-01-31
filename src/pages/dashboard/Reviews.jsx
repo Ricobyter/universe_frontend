@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { MdOutlineRateReview } from 'react-icons/md';
 import SideNavBar from '../../components/dashboard/SideNavBar';
 import ReviewSection from '../../components/dashboard/reviews/ReviewSection';
+import { api } from '../../config/api';
 
 export default function Reviews() {
   const navigate = useNavigate();

@@ -36,7 +36,7 @@ export default function FeaturedUniversities() {
   useEffect(() => {
     const fetchFeaturedUniversities = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/universities?isFeatured=true&limit=4');
+        const response = await fetch(`${api.universities.getAll}?isFeatured=true&limit=4`);
         const data = await response.json();
         
         console.log('Featured Universities Response:', data);

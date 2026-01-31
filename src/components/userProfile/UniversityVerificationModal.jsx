@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FiX, FiSearch, FiMail, FiCheck } from "react-icons/fi";
+import { api } from "../../config/api";
 
 export default function UniversityVerificationModal({ isOpen, onClose, onSuccess }) {
   const [step, setStep] = useState(1); // 1: Select University, 2: Enter Email, 3: Enter Code
@@ -34,7 +35,7 @@ export default function UniversityVerificationModal({ isOpen, onClose, onSuccess
 
   const fetchUniversities = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/universities?limit=100');
+      const response = await fetch(`${api.universities.getAll}?limit=100`);
       if (response.ok) {
         const data = await response.json();
         setUniversities(data.universities || []);
@@ -58,7 +59,7 @@ export default function UniversityVerificationModal({ isOpen, onClose, onSuccess
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/api/verification/send-code', {
+      const response = await fetch(api.verification.sendCode, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -92,7 +93,7 @@ export default function UniversityVerificationModal({ isOpen, onClose, onSuccess
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/api/verification/verify-code', {
+      const response = await fetch(api.verification.verifyCode, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

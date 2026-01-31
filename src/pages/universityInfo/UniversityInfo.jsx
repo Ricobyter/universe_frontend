@@ -19,7 +19,7 @@ export default function UniversityInfo() {
   useEffect(() => {
     const fetchUniversity = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/universities/${id}`);
+        const response = await fetch(api.universities.getById(id));
         const data = await response.json();
 
         if (!response.ok) {

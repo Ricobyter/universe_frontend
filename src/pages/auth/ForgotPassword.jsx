@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiMail, FiLock, FiCheck } from "react-icons/fi";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+import { api } from "../../config/api";
 
 export default function ForgotPassword() {
   const [step, setStep] = useState(1); // 1: Enter Email, 2: Enter Code, 3: New Password

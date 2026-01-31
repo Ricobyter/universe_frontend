@@ -8,6 +8,7 @@ import UserGrowthChart from "../../components/dashboard/dashboardStats/UserGrowt
 import UniversitiesTable from "../../components/dashboard/dashboardStats/UniversitiesTable";
 import ReviewsTable from "../../components/dashboard/dashboardStats/ReviewsTable";
 import { LiaUniversitySolid } from "react-icons/lia";
+import { api } from "../../config/api";
 
 export default function Dashboard() {
   const [stats, setStats] = useState({
@@ -37,11 +38,11 @@ export default function Dashboard() {
 
       // Fetch all data in parallel
       const [statsRes, reviewsRes, userGrowthRes, recentReviewsRes, recentUniversitiesRes] = await Promise.all([
-        fetch('http://localhost:3000/api/admin/stats', { headers }),
-        fetch('http://localhost:3000/api/admin/reviews-over-time?months=9', { headers }),
-        fetch('http://localhost:3000/api/admin/user-growth?months=7', { headers }),
-        fetch('http://localhost:3000/api/admin/recent-reviews?limit=10', { headers }),
-        fetch('http://localhost:3000/api/admin/recent-universities?limit=5', { headers })
+        fetch(api.admin.stats, { headers }),
+        fetch(`${api.admin.reviewsOverTime}?months=9`, { headers }),
+        fetch(`${api.admin.userGrowth}?months=7`, { headers }),
+        fetch(`${api.admin.recentReviews}?limit=10`, { headers }),
+        fetch(api.admin.recentUniversities(5), { headers })
       ]);
 
       // Check if any response failed

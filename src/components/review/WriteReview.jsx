@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { selectToken, selectIsAuthenticated } from "../../store/userSlice";
 import { IoIosStarOutline } from "react-icons/io";
 import { FaStar } from "react-icons/fa6";
+import { api } from "../../config/api";
 
 const ratingCategories = [
   { key: "academics", label: "Academics" },
@@ -157,7 +158,7 @@ export default function WriteReviewPage() {
 
   const fetchUniversities = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/universities');
+      const response = await fetch(api.universities.getAll);
       if (response.ok) {
         const data = await response.json();
         setUniversities(data.universities || []);

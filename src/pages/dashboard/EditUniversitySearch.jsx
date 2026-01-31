@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FiSearch, FiEdit2 } from 'react-icons/fi';
 import { MdLocationOn } from 'react-icons/md';
 import SideNavBar from '../../components/dashboard/SideNavBar';
+import { api } from '../../config/api';
 
 export default function EditUniversitySearch() {
   const navigate = useNavigate();

@@ -4,6 +4,7 @@ import { FiSearch } from 'react-icons/fi';
 import { HiUsers } from 'react-icons/hi';
 import { MdAdminPanelSettings, MdVerified } from 'react-icons/md';
 import SideNavBar from '../../components/dashboard/SideNavBar';
+import { api } from '../../config/api';
 
 export default function Users() {
   const navigate = useNavigate();

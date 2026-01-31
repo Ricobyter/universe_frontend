@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaStar, FaBookmark } from 'react-icons/fa';
+import { api } from '../../config/api';
 
 export default function SavedUniversities() {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ export default function SavedUniversities() {
   const handleRemoveSaved = async (universityId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3000/api/users/saved/${universityId}`, {
+      const response = await fetch(api.users.removeSaved(universityId), {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`

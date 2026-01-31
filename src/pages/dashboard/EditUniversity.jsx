@@ -5,6 +5,7 @@ import GeneralInfoForm from '../../components/dashboard/addUniversity/GeneralInf
 import AdditionalDetailsForm from '../../components/dashboard/addUniversity/AdditionalDetailsForm';
 import TagsInput from '../../components/dashboard/addUniversity/TagsInput';
 import CampusImageUploader from '../../components/dashboard/addUniversity/CampusImageUploader';
+import { api } from '../../config/api';
 
 export default function EditUniversity() {
   const { id } = useParams();

@@ -41,7 +41,7 @@ export default function MostPopular() {
   useEffect(() => {
     const fetchPopularUniversities = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/universities?limit=4&sortBy=views&order=desc');
+        const response = await fetch(`${api.universities.getAll}?limit=4&sortBy=views&order=desc`);
         const data = await response.json();
         
         console.log('Most Popular Response:', data);

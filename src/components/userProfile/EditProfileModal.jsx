@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import { FaCamera } from 'react-icons/fa';
+import { api } from '../../config/api';
 
 export default function EditProfileModal({ isOpen, onClose, user, onSuccess }) {
   const [formData, setFormData] = useState({
@@ -45,7 +46,7 @@ export default function EditProfileModal({ isOpen, onClose, user, onSuccess }) {
       formDataToUpload.append('image', file);
 
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/api/auth/upload-profile-image', {
+      const response = await fetch(api.auth.uploadProfileImage, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -83,7 +84,7 @@ export default function EditProfileModal({ isOpen, onClose, user, onSuccess }) {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/api/auth/update-profile', {
+      const response = await fetch(api.auth.updateProfile, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

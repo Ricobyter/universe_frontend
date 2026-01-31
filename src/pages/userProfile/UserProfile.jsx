@@ -7,6 +7,7 @@ import EditProfileModal from "../../components/userProfile/EditProfileModal";
 import { FiEdit2, FiTrash2, FiBookmark } from "react-icons/fi";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { MdEdit } from "react-icons/md";
+import { api } from "../../config/api";
 
 export default function UserProfile() {
   const [activeTab, setActiveTab] = useState("reviews");
@@ -38,7 +39,7 @@ export default function UserProfile() {
   const fetchUserReviews = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch('http://localhost:3000/api/reviews/my-reviews', {
+      const response = await fetch(api.reviews.myReviews, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -58,7 +59,7 @@ export default function UserProfile() {
   const fetchSavedUniversities = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch('http://localhost:3000/api/users/saved', {
+      const response = await fetch(api.users.saved, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -78,7 +79,7 @@ export default function UserProfile() {
   const handleRemoveSaved = async (universityId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3000/api/users/saved/${universityId}`, {
+      const response = await fetch(api.users.removeSaved(universityId), {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`

@@ -187,7 +187,7 @@ export default function SearchResultsPage() {
     const fetchUniversities = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:3000/api/universities?limit=1000`);
+        const response = await fetch(`${api.universities.getAll}?limit=1000`);
         const data = await response.json();
         setUniversities(data.universities || []);
       } catch (error) {

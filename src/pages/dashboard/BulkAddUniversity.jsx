@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SideNavBar from "../../components/dashboard/SideNavBar";
 import * as XLSX from "xlsx";
+import { api } from "../../config/api";
 
 export default function BulkAddUniversity() {
   const navigate = useNavigate();
@@ -109,7 +110,7 @@ export default function BulkAddUniversity() {
 
       // Send to backend
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:3000/api/universities/bulk", {
+      const response = await fetch(api.universities.bulk, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

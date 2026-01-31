@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { api } from "../../config/api";
 
 export default function SimilarInstitutionsSection({ university, darkMode }) {
   const [similarUniversities, setSimilarUniversities] = useState([]);
@@ -7,7 +8,7 @@ export default function SimilarInstitutionsSection({ university, darkMode }) {
     const fetchSimilar = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3000/api/universities?country=${university.country}&type=${university.type}&limit=3`
+          `${api.universities.getAll}?country=${university.country}&type=${university.type}&limit=3`
         );
         const data = await response.json();
         

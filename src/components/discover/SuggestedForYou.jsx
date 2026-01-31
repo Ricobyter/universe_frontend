@@ -68,7 +68,7 @@ export default function SuggestedForYou() {
   const fetchSuggestedUniversities = async () => {
     try {
       // Try to fetch universities from user's country
-      const response = await fetch(`http://localhost:3000/api/universities?country=${encodeURIComponent(userLocation.country)}&limit=4`);
+      const response = await fetch(`${api.universities.getAll}?country=${encodeURIComponent(userLocation.country)}&limit=4`);
       const data = await response.json();
       
       if (response.ok && data.universities && data.universities.length > 0) {

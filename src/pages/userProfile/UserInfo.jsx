@@ -14,7 +14,7 @@ export default function UserInfo() {
     const fetchUser = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:3000/api/users/${id}`);
+        const response = await fetch(api.users.getById(id));
         const data = await response.json();
 
         if (!response.ok) {
