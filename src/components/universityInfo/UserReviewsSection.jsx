@@ -29,6 +29,7 @@ export default function UserReviewsSection({ universityId, darkMode }) {
 
       const response = await fetch(
           `${api.reviews.getAll}?university=${universityId}&sortBy=${sortBy}&order=${order}&limit=10`
+      );
       
       if (response.ok) {
         const data = await response.json();
