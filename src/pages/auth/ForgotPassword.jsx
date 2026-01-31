@@ -23,7 +23,8 @@ export default function ForgotPassword() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3000/api/auth/forgot-password", {
+      console.log('📧 Sending reset code to:', api.auth.forgotPassword);
+      const response = await fetch(api.auth.forgotPassword, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -52,7 +53,8 @@ export default function ForgotPassword() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3000/api/auth/verify-reset-code", {
+      console.log('🔑 Verifying code at:', api.auth.verifyResetCode);
+      const response = await fetch(api.auth.verifyResetCode, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -92,7 +94,8 @@ export default function ForgotPassword() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3000/api/auth/reset-password", {
+      console.log('🔒 Resetting password at:', api.auth.resetPassword);
+      const response = await fetch(api.auth.resetPassword, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
