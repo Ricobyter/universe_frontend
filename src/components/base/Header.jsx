@@ -48,9 +48,17 @@ const Header = () => {
                 onClick={() => setShowDropdown(!showDropdown)}
                 className="flex items-center gap-2 hover:opacity-80 transition-opacity"
               >
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-teal-500 to-blue-600 flex items-center justify-center text-white font-semibold text-xs">
-                  {user?.name?.charAt(0).toUpperCase() || "U"}
-                </div>
+                {user?.userImageUrl ? (
+                  <img 
+                    src={user.userImageUrl} 
+                    alt={user.name || "User"} 
+                    className="w-8 h-8 rounded-full object-cover border border-gray-600"
+                  />
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-teal-500 to-blue-600 flex items-center justify-center text-white font-semibold text-xs">
+                    {user?.name?.charAt(0).toUpperCase() || "U"}
+                  </div>
+                )}
               </button>
               
               {showDropdown && (

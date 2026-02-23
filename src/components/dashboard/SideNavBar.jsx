@@ -89,7 +89,7 @@ export default function SideNavBar() {
             <p className="text-sm font-medium leading-normal">Reviews</p>
           </Link>
           
-          <Link 
+          {/* <Link 
             to="/dashboard/analytics" 
             className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
               isActive('/dashboard/analytics') 
@@ -99,11 +99,11 @@ export default function SideNavBar() {
           >
             <MdAnalytics className="text-lg"/>
             <p className="text-sm font-medium leading-normal">Analytics</p>
-          </Link>
+          </Link> */}
         </div>
       </div>
       
-      <div className="flex flex-col gap-1 border-t border-[#004F4F] pt-4">
+      {/* <div className="flex flex-col gap-1 border-t border-[#004F4F] pt-4">
         <Link 
           to="/dashboard/settings" 
           className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
@@ -115,7 +115,7 @@ export default function SideNavBar() {
           <IoMdSettings className="text-lg"/>
           <p className="text-sm font-medium leading-normal">Settings</p>
         </Link>
-      </div>
+      </div> */}
     </aside>
   );
 }
