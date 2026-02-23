@@ -1,3 +1,26 @@
+/**
+ * Edit University Page Component
+ * 
+ * Page for editing existing university information.
+ * Features:
+ * - Pre-populated form with existing university data
+ * - Update all university fields (required and optional)
+ * - Change or remove logo
+ * - Add, remove, or update campus images
+ * - Handle image uploads to Cloudinary
+ * - Form validation before submission
+ * - Success/error feedback
+ * 
+ * Image Handling:
+ * - New images uploaded to Cloudinary
+ * - Old images deleted from Cloudinary when replaced
+ * - Tracks removed images for cleanup
+ * 
+ * Authentication:
+ * - Requires admin role
+ * - Uses JWT token for API requests
+ */
+
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import SideNavBar from '../../components/dashboard/SideNavBar';
@@ -8,13 +31,17 @@ import CampusImageUploader from '../../components/dashboard/addUniversity/Campus
 import { api } from '../../config/api';
 
 export default function EditUniversity() {
+  // Get university ID from URL params
   const { id } = useParams();
   const navigate = useNavigate();
+  
+  // UI state management
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   
+  // Form data - matches AddUniversity structure
   const [formData, setFormData] = useState({
     name: '',
     logo: null,
@@ -36,15 +63,23 @@ export default function EditUniversity() {
     campusImages: []
   });
 
+  // Track existing images for comparison/deletion
   const [existingLogoUrl, setExistingLogoUrl] = useState('');
   const [existingCampusImages, setExistingCampusImages] = useState([]);
+  
+  // Image removal tracking
   const [removeLogo, setRemoveLogo] = useState(false);
   const [removedCampusImages, setRemovedCampusImages] = useState([]);
 
+  // Fetch university data when component mounts or ID changes
   useEffect(() => {
     fetchUniversityData();
   }, [id]);
 
+  /**
+   * Fetch existing university data and populate form
+   * Loads all current values including images
+   */
   const fetchUniversityData = async () => {
     try {
       const token = localStorage.getItem('token');

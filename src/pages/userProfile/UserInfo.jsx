@@ -1,16 +1,51 @@
+/**
+ * User Info Page Component (Public Profile View)
+ * 
+ * Displays public profile information for any user.
+ * Different from UserProfile.jsx - this is the public-facing view.
+ * 
+ * Features:
+ * - View any user's public profile by user ID
+ * - Display basic user information (name, university, join date)
+ * - Show all non-anonymous reviews by the user
+ * - Review count and statistics
+ * - Links to reviewed universities
+ * 
+ * Route: /user/:id
+ * 
+ * Data Loading:
+ * - User profile data from /api/users/:id
+ * - User's reviews from /api/reviews/user/:id
+ * - Only shows non-anonymous reviews (respects privacy)
+ * 
+ * Differences from UserProfile:
+ * - UserProfile.jsx: Own profile with edit capabilities
+ * - UserInfo.jsx: Public view of any user's profile (read-only)
+ */
+
 import React, { useEffect, useState } from "react";
 import { api } from "../../config/api";
 import { Link, useParams } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 
 export default function UserInfo() {
+  // Get user ID from URL parameter
   const { id } = useParams();
+  
+  // User data state
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  
+  // Reviews state
   const [reviews, setReviews] = useState([]);
   const [reviewsLoading, setReviewsLoading] = useState(true);
 
+  /**
+   * Fetch user profile data
+   * Public endpoint - no authentication required
+   * Re-fetches when URL parameter (user ID) changes
+   */
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -33,6 +68,11 @@ export default function UserInfo() {
     fetchUser();
   }, [id]);
 
+  /**
+   * Fetch reviews written by this user
+   * Public endpoint - shows only non-anonymous reviews
+   * Anonymous reviews are filtered out to respect privacy
+   */
   useEffect(() => {
     const fetchReviews = async () => {
       try {
@@ -55,6 +95,11 @@ export default function UserInfo() {
     fetchReviews();
   }, [id]);
 
+  /**
+   * Format date to readable string (e.g., "Jan 15, 2024")
+   * @param {string} dateString - ISO date string
+   * @returns Formatted date string
+   */
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
@@ -63,6 +108,11 @@ export default function UserInfo() {
     });
   };
 
+  /**
+   * Render star rating visualization
+   * @param {number} rating - Rating value (0-5)
+   * @returns Star icons with filled/empty states
+   */
   const renderStars = (rating) => (
     <div className="flex items-center gap-1">
       {[...Array(5)].map((_, i) => (

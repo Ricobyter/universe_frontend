@@ -1,3 +1,20 @@
+/**
+ * Universities Management Page Component
+ * 
+ * Admin page for managing university listings on the platform.
+ * Features:
+ * - View featured universities (shown on homepage)
+ * - Recently added universities dashboard
+ * - Most popular universities by rating
+ * - Manage featured status with modal interface
+ * - Quick actions: Add new, Edit existing, Manage featured
+ * - Real-time updates when toggling featured status
+ * 
+ * Authentication:
+ * - Requires admin role
+ * - Uses JWT token for API requests
+ */
+
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiEdit2, FiPlus } from 'react-icons/fi';
@@ -6,30 +23,43 @@ import SideNavBar from '../../components/dashboard/SideNavBar';
 import UniversitySection from '../../components/dashboard/universities/UniversitySection';
 import FeaturedModal from '../../components/dashboard/universities/FeaturedModal';
 import UniversityCard from '../../components/dashboard/universities/UniversityCard';
+import { api } from '../../config/api';
 
 export default function Universities() {
   const navigate = useNavigate();
+  
+  // University lists state
   const [recentUniversities, setRecentUniversities] = useState([]);
   const [popularUniversities, setPopularUniversities] = useState([]);
   const [featuredUniversities, setFeaturedUniversities] = useState([]);
+  const [allUniversities, setAllUniversities] = useState([]);
+  
+  // UI state management
   const [loading, setLoading] = useState(true);
   const [showFeaturedModal, setShowFeaturedModal] = useState(false);
-  const [allUniversities, setAllUniversities] = useState([]);
+  
+  // Search state for featured modal
   const [searchTerm, setSearchTerm] = useState('');
 
+  // Fetch universities on component mount
   useEffect(() => {
     fetchUniversities();
   }, []);
 
+  /**
+   * Fetch featured, recent, and popular universities
+   * Loads data for all three sections displayed on the page
+   */
   const fetchUniversities = async () => {
     try {
+      // Check authentication
       const token = localStorage.getItem('token');
       if (!token) {
         navigate('/login');
         return;
       }
 
-      // Fetch featured universities
+      // Fetch featured universities (admin-only endpoint)
       const featuredRes = await fetch(api.admin.featuredUniversities, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -38,7 +68,7 @@ export default function Universities() {
       const featuredData = await featuredRes.json();
       setFeaturedUniversities(Array.isArray(featuredData) ? featuredData : []);
 
-      // Fetch recent universities
+      // Fetch recently added universities (admin-only endpoint)
       const recentRes = await fetch(`${api.admin.recentUniversities}?limit=6`, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -47,7 +77,7 @@ export default function Universities() {
       const recentData = await recentRes.json();
       setRecentUniversities(Array.isArray(recentData) ? recentData : []);
 
-      // Fetch popular universities (sorted by rating)
+      // Fetch popular universities sorted by rating (public endpoint)
       const popularRes = await fetch(`${api.universities.getAll}?sortBy=rating&order=desc&limit=6`);
       const popularData = await popularRes.json();
       setPopularUniversities(popularData.universities || []);
@@ -59,6 +89,10 @@ export default function Universities() {
     }
   };
 
+  /**
+   * Fetch all universities for the featured management modal
+   * Loads a larger list (up to 100) for searching and managing featured status
+   */
   const fetchAllUniversities = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -74,12 +108,18 @@ export default function Universities() {
     }
   };
 
+  /**
+   * Toggle featured status for a university
+   * Updates the database and refreshes the UI
+   * @param {string} universityId - MongoDB ObjectId of the university
+   */
   const toggleFeaturedStatus = async (universityId) => {
     try {
       const token = localStorage.getItem('token');
       console.log('Toggling featured for university:', universityId);
       console.log('Token:', token ? 'exists' : 'missing');
       
+      // Send PATCH request to toggle featured status
       const response = await fetch(api.universities.toggleFeatured(universityId), {
         method: 'PATCH',
         headers: {
@@ -94,7 +134,8 @@ export default function Universities() {
         const data = await response.json();
         console.log('Toggle response:', data);
         
-        // Update allUniversities state immediately
+        // Optimistically update allUniversities state immediately
+        // This provides instant feedback in the modal
         setAllUniversities(prevUniversities =>
           prevUniversities.map(uni =>
             uni._id === universityId
@@ -103,7 +144,7 @@ export default function Universities() {
           )
         );
         
-        // Refresh featured universities list
+        // Refresh main university lists to reflect changes
         fetchUniversities();
       } else {
         const error = await response.json();
@@ -117,6 +158,10 @@ export default function Universities() {
     }
   };
 
+  /**
+   * Open featured management modal
+   * Fetches all universities and displays the modal
+   */
   const openFeaturedModal = () => {
     fetchAllUniversities();
     setShowFeaturedModal(true);
@@ -182,18 +227,18 @@ export default function Universities() {
         />
 
         {/* Recently Added Section */}
-        <UniversitySection
+        {/* <UniversitySection
           title="Recently Added"
           universities={recentUniversities}
           emptyMessage="No universities added yet"
-        />
+        /> */}
 
         {/* Most Popular Section */}
-        <UniversitySection
+        {/* <UniversitySection
           title="Most Popular"
           universities={popularUniversities}
           emptyMessage="No popular universities found"
-        />
+        /> */}
       </div>
 
       {/* Featured Universities Modal */}

@@ -23,6 +23,8 @@ export const api = {
     getAll: `${API_URL}/api/universities`,
     getById: (id) => `${API_URL}/api/universities/${id}`,
     create: `${API_URL}/api/universities`,
+    update: (id) => `${API_URL}/api/universities/${id}`,
+    delete: (id) => `${API_URL}/api/universities/${id}`,
     bulk: `${API_URL}/api/universities/bulk`,
     recordView: (id) => `${API_URL}/api/universities/${id}/view`,
     toggleFeatured: (id) => `${API_URL}/api/admin/universities/${id}/toggle-featured`,
@@ -31,7 +33,7 @@ export const api = {
   // Admin endpoints
   admin: {
     stats: `${API_URL}/api/admin/stats`,
-    users: (params = '') => `${API_URL}/api/admin/users${params ? `?${params}` : ''}`,
+    users: `${API_URL}/api/admin/users`,
     featuredUniversities: `${API_URL}/api/admin/featured-universities`,
     recentUniversities: (limit = 5) => `${API_URL}/api/admin/recent-universities?limit=${limit}`,
     reviewsOverTime: `${API_URL}/api/admin/reviews-over-time`,
@@ -53,6 +55,9 @@ export const api = {
     getAll: `${API_URL}/api/reviews`,
     myReviews: `${API_URL}/api/reviews/my-reviews`,
     create: `${API_URL}/api/reviews`,
+    getById: (id) => `${API_URL}/api/reviews/${id}`,
+    update: (id) => `${API_URL}/api/reviews/${id}`,
+    delete: (id) => `${API_URL}/api/reviews/${id}`,
     getByUser: (userId) => `${API_URL}/api/reviews?user=${userId}&sortBy=createdAt&order=desc&limit=20`,
     markHelpful: (id) => `${API_URL}/api/reviews/${id}/helpful`,
   },

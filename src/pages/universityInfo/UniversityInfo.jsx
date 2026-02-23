@@ -1,3 +1,33 @@
+/**
+ * University Info Page Component
+ * 
+ * Comprehensive university details page.
+ * Displays all information about a single university.
+ * 
+ * Features:
+ * - University header with logo and basic info
+ * - General information section
+ * - Additional details (fees, faculty, etc.)
+ * - Specializations/programs
+ * - Contact details
+ * - Description
+ * - Similar institutions recommendations
+ * - User reviews section
+ * - Theme toggle (dark/light mode)
+ * - View count tracking
+ * 
+ * Layout:
+ * - 3-column grid on large screens
+ * - Main content in left 2 columns
+ * - Sidebar in right column
+ * - Responsive stacking on smaller screens
+ * 
+ * Data Flow:
+ * - Fetches university data on mount
+ * - Increments view count
+ * - URL parameter determines which university to show
+ */
+
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import UniversityHeader from "../../components/universityInfo/UniversityHeader";
@@ -11,15 +41,25 @@ import UserReviewsSection from "../../components/universityInfo/UserReviewsSecti
 import { api } from "../../config/api";
 
 export default function UniversityInfo() {
+  // Get university ID from URL
   const { id } = useParams();
+  
+  // University data state
   const [university, setUniversity] = useState(null);
+  
+  // UI state
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [darkMode, setDarkMode] = useState(true);
 
+  /**
+   * Fetch university data and track view
+   * Runs when component mounts or ID changes
+   */
   useEffect(() => {
     const fetchUniversity = async () => {
       try {
+        // Fetch university details
         const response = await fetch(api.universities.getById(id));
         const data = await response.json();
 
@@ -29,13 +69,14 @@ export default function UniversityInfo() {
 
         setUniversity(data);
 
-        // Increment view count
+        // Increment view count - fire and forget
+        // Silently fails if analytics endpoint is down
         try {
           await fetch(api.universities.recordView(id), {
             method: 'POST'
           });
         } catch (viewErr) {
-          // Silently fail if view increment fails
+          // Don't break user experience if view tracking fails
           console.error('Failed to increment view:', viewErr);
         }
       } catch (err) {

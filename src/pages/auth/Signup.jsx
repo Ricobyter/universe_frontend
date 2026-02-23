@@ -1,3 +1,17 @@
+/**
+ * Signup Page Component
+ * 
+ * This component handles new user registration for the Universe platform.
+ * Features:
+ * - User registration with name, email, and password
+ * - Password confirmation validation
+ * - Password strength requirements (min 6 characters)
+ * - Password visibility toggles for both fields
+ * - Automatic login after successful registration
+ * - Form validation and error handling
+ * - Navigation to login and forgot password pages
+ */
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -7,19 +21,30 @@ import { FaRegEyeSlash } from "react-icons/fa6";
 import { api } from "../../config/api";
 
 export default function Signup() {
+  // Password visibility toggles for both password fields
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  
+  // Form data state
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: ""
   });
+  
+  // UI state management
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  
+  // Router and Redux hooks
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  /**
+   * Handle form input changes
+   * Updates form data and clears any existing errors
+   */
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -28,17 +53,21 @@ export default function Signup() {
     setError("");
   };
 
+  /**
+   * Handle form submission
+   * Validates inputs and creates new user account
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    // Validate passwords match
+    // Client-side validation: Ensure passwords match
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
       return;
     }
 
-    // Validate password length
+    // Client-side validation: Check minimum password length
     if (formData.password.length < 6) {
       setError("Password must be at least 6 characters long");
       return;
@@ -48,6 +77,9 @@ export default function Signup() {
 
     try {
       console.log('📝 Attempting signup to:', api.auth.register);
+      
+      // Send registration request to backend API
+      // Note: confirmPassword is not sent to backend as it's only for client-side validation
       const response = await fetch(api.auth.register, {
         method: "POST",
         headers: {
@@ -66,13 +98,14 @@ export default function Signup() {
         throw new Error(data.error || "Registration failed");
       }
 
-      // Store in Redux and localStorage
+      // Automatically log in the user after successful registration
+      // Store user data and JWT token in Redux and localStorage
       dispatch(setCredentials({
         user: data.user,
         token: data.token
       }));
 
-      // Redirect to dashboard
+      // Redirect to home page after successful registration
       navigate("/");
     } catch (err) {
       setError(err.message);

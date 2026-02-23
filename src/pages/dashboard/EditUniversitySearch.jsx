@@ -1,3 +1,24 @@
+/**
+ * Edit University Search Page Component
+ * 
+ * Search interface for finding universities to edit.
+ * Features:
+ * - Real-time search across university name, state, and country
+ * - Autocomplete suggestions dropdown
+ * - Visual university cards with location and type info
+ * - Fetches all universities on mount for fast client-side filtering
+ * - Click on a university to navigate to edit page
+ * 
+ * Search Strategy:
+ * - Loads all universities into memory (up to 1000)
+ * - Client-side filtering for instant results
+ * - No API calls on each keystroke
+ * 
+ * Authentication:
+ * - Requires admin role
+ * - Uses JWT token for initial fetch
+ */
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiSearch, FiEdit2 } from 'react-icons/fi';
@@ -7,18 +28,31 @@ import { api } from '../../config/api';
 
 export default function EditUniversitySearch() {
   const navigate = useNavigate();
+  
+  // Search state
   const [searchTerm, setSearchTerm] = useState('');
+  
+  // University data
   const [universities, setUniversities] = useState([]);
   const [filteredUniversities, setFilteredUniversities] = useState([]);
+  
+  // UI state
   const [loading, setLoading] = useState(true);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
+  // Fetch all universities on component mount
   useEffect(() => {
     fetchUniversities();
   }, []);
 
+  /**
+   * Filter universities based on search term
+   * Searches across name, state, and country fields
+   * Updates in real-time as user types
+   */
   useEffect(() => {
     if (searchTerm.trim()) {
+      // Case-insensitive search across multiple fields
       const filtered = universities.filter(uni =>
         uni.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         uni.state.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -32,6 +66,10 @@ export default function EditUniversitySearch() {
     }
   }, [searchTerm, universities]);
 
+  /**
+   * Fetch all universities for search
+   * Loads up to 1000 universities for client-side filtering
+   */
   const fetchUniversities = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -54,6 +92,10 @@ export default function EditUniversitySearch() {
     }
   };
 
+  /**
+   * Navigate to edit page for selected university
+   * @param {string} universityId - MongoDB ObjectId
+   */
   const handleUniversityClick = (universityId) => {
     navigate(`/dashboard/edit-university/${universityId}`);
   };

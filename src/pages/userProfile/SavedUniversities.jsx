@@ -1,3 +1,26 @@
+/**
+ * Saved Universities Page Component
+ * 
+ * Standalone page displaying user's bookmarked/saved universities.
+ * (Note: This functionality is also available as a tab in UserProfile.jsx)
+ * 
+ * Features:
+ * - Grid display of saved universities
+ * - University cards with images, ratings, and details
+ * - Remove from saved (unbookmark) action
+ * - Quick navigation to university detail pages
+ * - Empty state with call-to-action
+ * - Authentication required
+ * 
+ * Layout:
+ * - Responsive grid: 1 col mobile, 2 cols tablet, 3 cols desktop
+ * - Each card shows: campus image, logo, name, location, rating, type
+ * - Action buttons: View Details, Remove from Saved
+ * 
+ * Route: /saved-universities (if used standalone)
+ * Note: Same functionality exists in UserProfile page as a tab
+ */
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaStar, FaBookmark } from 'react-icons/fa';
@@ -5,16 +28,28 @@ import { api } from '../../config/api';
 
 export default function SavedUniversities() {
   const navigate = useNavigate();
+  
+  // Saved universities state
   const [savedUniversities, setSavedUniversities] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  /**
+   * Fetch saved universities on component mount
+   */
   useEffect(() => {
     fetchSavedUniversities();
   }, []);
 
+  /**
+   * Fetch all universities saved/bookmarked by current user
+   * Requires authentication - redirects to login if no token
+   * Returns full university objects with ratings and details
+   */
   const fetchSavedUniversities = async () => {
     try {
       const token = localStorage.getItem('token');
+      
+      // Redirect to login if not authenticated
       if (!token) {
         navigate('/login');
         return;
@@ -37,6 +72,11 @@ export default function SavedUniversities() {
     }
   };
 
+  /**
+   * Remove a university from saved list (unbookmark)
+   * Optimistically updates UI before server response
+   * @param {string} universityId - ID of university to remove
+   */
   const handleRemoveSaved = async (universityId) => {
     try {
       const token = localStorage.getItem('token');
@@ -48,6 +88,7 @@ export default function SavedUniversities() {
       });
 
       if (response.ok) {
+        // Optimistically remove from UI
         setSavedUniversities(savedUniversities.filter(uni => uni._id !== universityId));
       }
     } catch (error) {

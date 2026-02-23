@@ -1,6 +1,6 @@
 import { FiEye, FiEdit2, FiTrash2 } from 'react-icons/fi';
 
-export default function UniversitiesTable({ universities, formatDate }) {
+export default function UniversitiesTable({ universities, formatDate, onView, onEdit, onDelete }) {
   return (
     <div className="bg-black rounded-xl border border-gray-800 overflow-hidden mb-8">
       <div className="p-6 border-b border-gray-800">
@@ -72,13 +72,25 @@ export default function UniversitiesTable({ universities, formatDate }) {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <div className="flex items-center gap-2">
-                      <button className="p-2 hover:bg-gray-800 rounded-lg transition-colors text-gray-400 hover:text-white">
+                      <button 
+                        onClick={() => onView(university._id)}
+                        className="p-2 hover:bg-gray-800 rounded-lg transition-colors text-gray-400 hover:text-white"
+                        title="View university"
+                      >
                         <FiEye className="w-4 h-4" />
                       </button>
-                      <button className="p-2 hover:bg-gray-800 rounded-lg transition-colors text-gray-400 hover:text-white">
+                      <button 
+                        onClick={() => onEdit(university._id)}
+                        className="p-2 hover:bg-gray-800 rounded-lg transition-colors text-gray-400 hover:text-white"
+                        title="Edit university"
+                      >
                         <FiEdit2 className="w-4 h-4" />
                       </button>
-                      <button className="p-2 hover:bg-gray-800 rounded-lg transition-colors text-gray-400 hover:text-red-400">
+                      <button 
+                        onClick={() => onDelete(university._id, university.name)}
+                        className="p-2 hover:bg-gray-800 rounded-lg transition-colors text-gray-400 hover:text-red-400"
+                        title="Delete university"
+                      >
                         <FiTrash2 className="w-4 h-4" />
                       </button>
                     </div>

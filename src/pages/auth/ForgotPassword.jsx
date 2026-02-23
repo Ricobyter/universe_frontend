@@ -1,3 +1,21 @@
+/**
+ * Forgot Password Page Component
+ * 
+ * This component handles the password reset flow in three steps:
+ * Step 1: User enters email address
+ * Step 2: User enters 6-digit verification code sent to email
+ * Step 3: User sets new password
+ * 
+ * Features:
+ * - Multi-step password reset flow
+ * - Email verification with timed codes (10 minutes expiry)
+ * - Password confirmation validation
+ * - Password visibility toggles
+ * - Resend code functionality
+ * - Navigation between steps with back buttons
+ * - Success and error message handling
+ */
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiMail, FiLock, FiCheck } from "react-icons/fi";
@@ -5,18 +23,30 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { api } from "../../config/api";
 
 export default function ForgotPassword() {
-  const [step, setStep] = useState(1); // 1: Enter Email, 2: Enter Code, 3: New Password
+  // Step state: 1 = Enter Email, 2 = Enter Code, 3 = New Password
+  const [step, setStep] = useState(1);
+  
+  // Form data state
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  
+  // Password visibility toggles
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  
+  // UI state management
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  
   const navigate = useNavigate();
 
+  /**
+   * Step 1: Send verification code to email
+   * Requests a 6-digit code to be sent to the user's email address
+   */
   const handleSendCode = async (e) => {
     e.preventDefault();
     setError("");
@@ -24,6 +54,8 @@ export default function ForgotPassword() {
 
     try {
       console.log('📧 Sending reset code to:', api.auth.forgotPassword);
+      
+      // Request backend to send verification code to email
       const response = await fetch(api.auth.forgotPassword, {
         method: "POST",
         headers: {
@@ -39,6 +71,7 @@ export default function ForgotPassword() {
       }
 
       setSuccess("Reset code sent to your email!");
+      // Move to step 2 (code verification)
       setStep(2);
     } catch (err) {
       setError(err.message);
@@ -47,6 +80,10 @@ export default function ForgotPassword() {
     }
   };
 
+  /**
+   * Step 2: Verify the code sent to email
+   * Validates the 6-digit code entered by the user
+   */
   const handleVerifyCode = async (e) => {
     e.preventDefault();
     setError("");
@@ -54,6 +91,8 @@ export default function ForgotPassword() {
 
     try {
       console.log('🔑 Verifying code at:', api.auth.verifyResetCode);
+      
+      // Verify the code with backend
       const response = await fetch(api.auth.verifyResetCode, {
         method: "POST",
         headers: {
@@ -69,6 +108,7 @@ export default function ForgotPassword() {
       }
 
       setSuccess("Code verified! Set your new password.");
+      // Move to step 3 (set new password)
       setStep(3);
     } catch (err) {
       setError(err.message);
@@ -77,15 +117,21 @@ export default function ForgotPassword() {
     }
   };
 
+  /**
+   * Step 3: Reset password with new password
+   * Validates and submits new password to backend
+   */
   const handleResetPassword = async (e) => {
     e.preventDefault();
     setError("");
 
+    // Client-side validation: Ensure passwords match
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
 
+    // Client-side validation: Check minimum password length
     if (password.length < 6) {
       setError("Password must be at least 6 characters long");
       return;
@@ -95,6 +141,8 @@ export default function ForgotPassword() {
 
     try {
       console.log('🔒 Resetting password at:', api.auth.resetPassword);
+      
+      // Submit new password along with email and verification code
       const response = await fetch(api.auth.resetPassword, {
         method: "POST",
         headers: {
@@ -109,6 +157,7 @@ export default function ForgotPassword() {
         throw new Error(data.error || "Failed to reset password");
       }
 
+      // Show success message and redirect to login after 2 seconds
       setSuccess("Password reset successful! Redirecting to login...");
       setTimeout(() => {
         navigate("/login");
@@ -120,13 +169,19 @@ export default function ForgotPassword() {
     }
   };
 
+  /**
+   * Handle back button navigation between steps
+   * Clears relevant state when going back
+   */
   const handleBack = () => {
     setError("");
     setSuccess("");
     if (step === 2) {
+      // Go back to email entry, clear code
       setStep(1);
       setCode("");
     } else if (step === 3) {
+      // Go back to code entry, clear passwords
       setStep(2);
       setPassword("");
       setConfirmPassword("");

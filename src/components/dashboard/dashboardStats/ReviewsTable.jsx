@@ -1,6 +1,6 @@
-import { FiEye, FiEdit2, FiTrash2 } from 'react-icons/fi';
+import { FiTrash2 } from 'react-icons/fi';
 
-export default function ReviewsTable({ reviews, formatDate, getStatusBadge }) {
+export default function ReviewsTable({ reviews, formatDate, getStatusBadge, onDelete }) {
   return (
     <div className="bg-black rounded-xl border border-gray-800 overflow-hidden">
       <div className="p-6 border-b border-gray-800">
@@ -65,13 +65,11 @@ export default function ReviewsTable({ reviews, formatDate, getStatusBadge }) {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <div className="flex items-center gap-2">
-                      <button className="p-2 hover:bg-gray-800 rounded-lg transition-colors text-gray-400 hover:text-white">
-                        <FiEye className="w-4 h-4" />
-                      </button>
-                      <button className="p-2 hover:bg-gray-800 rounded-lg transition-colors text-gray-400 hover:text-white">
-                        <FiEdit2 className="w-4 h-4" />
-                      </button>
-                      <button className="p-2 hover:bg-gray-800 rounded-lg transition-colors text-gray-400 hover:text-red-400">
+                      <button 
+                        onClick={() => onDelete(review._id, review.title)}
+                        className="p-2 hover:bg-gray-800 rounded-lg transition-colors text-gray-400 hover:text-red-400"
+                        title="Delete review"
+                      >
                         <FiTrash2 className="w-4 h-4" />
                       </button>
                     </div>

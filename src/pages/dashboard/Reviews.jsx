@@ -1,3 +1,19 @@
+/**
+ * Reviews Management Page Component
+ * 
+ * Admin page for monitoring and managing user reviews.
+ * Features:
+ * - View most recent reviews
+ * - View most popular reviews (by helpful votes)
+ * - Statistics: total reviews, anonymous vs normal reviews
+ * - Review cards with university info, user details, and timestamps
+ * - Responsive design with mobile-optimized layout
+ * 
+ * Authentication:
+ * - Requires admin role
+ * - Uses JWT token for API requests
+ */
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MdOutlineRateReview } from 'react-icons/md';
@@ -7,23 +23,34 @@ import { api } from '../../config/api';
 
 export default function Reviews() {
   const navigate = useNavigate();
+  
+  // Review data state
   const [recentReviews, setRecentReviews] = useState([]);
   const [popularReviews, setPopularReviews] = useState([]);
+  
+  // UI state management
   const [loading, setLoading] = useState(true);
 
+  // Fetch reviews on component mount
   useEffect(() => {
     fetchReviews();
   }, []);
 
+  /**
+   * Fetch recent and popular reviews from the API
+   * Recent: sorted by creation date
+   * Popular: sorted by helpful votes count
+   */
   const fetchReviews = async () => {
     try {
+      // Check authentication
       const token = localStorage.getItem('token');
       if (!token) {
         navigate('/login');
         return;
       }
 
-      // Fetch recent reviews
+      // Fetch most recent reviews
       const recentRes = await fetch(`${api.admin.recentReviews}?limit=6`, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -32,7 +59,7 @@ export default function Reviews() {
       const recentData = await recentRes.json();
       setRecentReviews(Array.isArray(recentData) ? recentData : []);
 
-      // Fetch popular reviews (most helpful)
+      // Fetch popular reviews (sorted by helpful votes)
       const popularRes = await fetch(`${api.admin.popularReviews}?limit=6`, {
         headers: {
           'Authorization': `Bearer ${token}`

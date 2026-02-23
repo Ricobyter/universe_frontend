@@ -1,3 +1,29 @@
+/**
+ * Bulk Add University Page Component
+ * 
+ * Page for adding multiple universities at once via Excel upload.
+ * Features:
+ * - Excel file upload (.xlsx, .xls)
+ * - Template download functionality
+ * - File validation and parsing
+ * - Batch processing with success/error tracking
+ * - Progress feedback during upload
+ * - Detailed results showing successes and failures
+ * 
+ * Workflow:
+ * 1. User downloads template
+ * 2. Fills in university data in Excel
+ * 3. Uploads filled template
+ * 4. System processes and validates each row
+ * 5. Shows results with success/error counts
+ * 
+ * Uses XLSX library for Excel file parsing
+ * 
+ * Authentication:
+ * - Requires admin role
+ * - Uses JWT token for API requests
+ */
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SideNavBar from "../../components/dashboard/SideNavBar";
@@ -6,14 +32,25 @@ import { api } from "../../config/api";
 
 export default function BulkAddUniversity() {
   const navigate = useNavigate();
+  
+  // File and upload state
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
+  
+  // Results after upload
   const [results, setResults] = useState(null);
+  
+  // Error messages
   const [error, setError] = useState("");
 
+  /**
+   * Handle file selection and validation
+   * Only accepts Excel files (.xlsx, .xls)
+   */
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
+      // Validate file type is Excel
       if (
         selectedFile.type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
         selectedFile.type === "application/vnd.ms-excel"
@@ -27,7 +64,12 @@ export default function BulkAddUniversity() {
     }
   };
 
+  /**
+   * Generate and download template Excel file
+   * Provides example data and all required/optional fields
+   */
   const downloadTemplate = () => {
+    // Create template with example data
     const template = [
       {
         name: "Example University",
@@ -49,12 +91,17 @@ export default function BulkAddUniversity() {
       }
     ];
 
+    // Convert to Excel and trigger download
     const ws = XLSX.utils.json_to_sheet(template);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Universities");
     XLSX.writeFile(wb, "university_template.xlsx");
   };
 
+  /**
+   * Handle file upload and processing
+   * Parses Excel file, validates data, and sends to backend
+   */
   const handleUpload = async () => {
     if (!file) {
       setError("Please select a file first");
@@ -66,18 +113,21 @@ export default function BulkAddUniversity() {
     setResults(null);
 
     try {
+      // Read and parse Excel file
       const data = await file.arrayBuffer();
       const workbook = XLSX.read(data);
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
       const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
+      // Validate file has data
       if (jsonData.length === 0) {
         setError("The Excel file is empty");
         setUploading(false);
         return;
       }
 
-      // Process universities
+      // Process each row into university object
+      // Only include fields that have values
       const universities = jsonData.map((row) => {
         const university = {
           // Required fields
@@ -89,7 +139,7 @@ export default function BulkAddUniversity() {
           website: row.website,
         };
 
-        // Optional fields - only add if they exist
+        // Optional fields - only add if they exist in the Excel file
         if (row.averageFees) university.averageFees = Number(row.averageFees);
         if (row.accreditation) university.accreditation = row.accreditation;
         if (row.totalStudents) university.totalStudents = Number(row.totalStudents);

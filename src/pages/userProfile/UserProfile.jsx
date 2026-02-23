@@ -1,3 +1,30 @@
+/**
+ * User Profile Page Component
+ * 
+ * Displays comprehensive user profile with two main sections:
+ * 1. My Reviews - User's submitted reviews with edit/delete actions
+ * 2. Saved Universities - Bookmarked universities for later viewing
+ * 
+ * Features:
+ * - Profile header with avatar and basic info
+ * - University verification option for unverified users
+ * - Edit profile modal integration
+ * - Tab-based navigation between reviews and saved items
+ * - Review management (view, edit, delete)
+ * - Saved universities management (view, remove)
+ * - Authentication protection (redirects to login if not authenticated)
+ * 
+ * Authentication:
+ * - Requires valid JWT token in localStorage
+ * - User data loaded from localStorage on mount
+ * - Protected route - redirects to /login if unauthenticated
+ * 
+ * Data Loading:
+ * - User reviews fetched on mount
+ * - Saved universities fetched on mount
+ * - Both load independently with separate loading states
+ */
+
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../../components/base/Header";
@@ -10,32 +37,56 @@ import { MdEdit } from "react-icons/md";
 import { api } from "../../config/api";
 
 export default function UserProfile() {
+  // Tab state - switches between reviews and saved universities
   const [activeTab, setActiveTab] = useState("reviews");
+  
+  // User data and authentication state
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  
+  // Saved universities state
   const [savedUniversities, setSavedUniversities] = useState([]);
   const [loadingSaved, setLoadingSaved] = useState(true);
+  
+  // User reviews state
   const [userReviews, setUserReviews] = useState([]);
   const [loadingReviews, setLoadingReviews] = useState(true);
+  
+  // Modal visibility state
   const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false);
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
+  
   const navigate = useNavigate();
 
+  /**
+   * Authentication check and data initialization
+   * Verifies user is logged in, loads profile data
+   * Redirects to login if no auth token found
+   */
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userData = localStorage.getItem("user");
     
+    // Redirect to login if not authenticated
     if (!token || !userData) {
       navigate("/login");
       return;
     }
     
+    // Load user data from localStorage
     setUser(JSON.parse(userData));
     setLoading(false);
+    
+    // Fetch user's content
     fetchSavedUniversities();
     fetchUserReviews();
   }, [navigate]);
 
+  /**
+   * Fetch all reviews written by the current user
+   * Includes university information for each review
+   * Authenticated endpoint requiring JWT token
+   */
   const fetchUserReviews = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -56,6 +107,11 @@ export default function UserProfile() {
     }
   };
 
+  /**
+   * Fetch all universities saved/bookmarked by the current user
+   * Returns full university objects with ratings and details
+   * Authenticated endpoint requiring JWT token
+   */
   const fetchSavedUniversities = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -76,6 +132,11 @@ export default function UserProfile() {
     }
   };
 
+  /**
+   * Remove a university from saved/bookmarked list
+   * Updates UI immediately using optimistic update pattern
+   * @param {string} universityId - ID of university to remove
+   */
   const handleRemoveSaved = async (universityId) => {
     try {
       const token = localStorage.getItem('token');
@@ -87,6 +148,7 @@ export default function UserProfile() {
       });
 
       if (response.ok) {
+        // Optimistically remove from UI
         setSavedUniversities(savedUniversities.filter(uni => uni._id !== universityId));
       }
     } catch (error) {
@@ -94,14 +156,24 @@ export default function UserProfile() {
     }
   };
 
+  /**
+   * Callback when university verification is successful
+   * Updates user state with newly verified university info
+   * @param {object} updatedUser - Updated user object from server
+   */
   const handleVerificationSuccess = (updatedUser) => {
     setUser(updatedUser);
-    // Show success message or notification if needed
+    // Future: Show success notification
   };
 
+  /**
+   * Callback when profile edit is successful
+   * Updates user state with new profile information
+   * @param {object} updatedUser - Updated user object from server
+   */
   const handleEditProfileSuccess = (updatedUser) => {
     setUser(updatedUser);
-    // Show success message or notification if needed
+    // Future: Show success notification
   };
 
   if (loading) {
@@ -112,6 +184,11 @@ export default function UserProfile() {
     );
   }
 
+  /**
+   * Renders visual star rating (1-5 stars)
+   * @param {number} rating - Rating value to display
+   * @returns Star icons with filled/empty states
+   */
   const renderStars = (rating) => {
     return (
       <div className="flex items-center gap-1">

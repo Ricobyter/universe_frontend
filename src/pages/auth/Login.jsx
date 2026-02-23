@@ -1,3 +1,17 @@
+/**
+ * Login Page Component
+ * 
+ * This component handles user authentication for the Universe platform.
+ * Features:
+ * - Email and password login
+ * - Password visibility toggle
+ * - JWT token authentication
+ * - Redux state management for user session
+ * - Error handling and loading states
+ * - Navigation to signup and forgot password pages
+ * - Smart navigation back to previous page or home
+ */
+
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -8,17 +22,28 @@ import { IoMdArrowBack } from "react-icons/io";
 import { api } from "../../config/api";
 
 export default function Login() {
+  // State for password visibility toggle
   const [showPassword, setShowPassword] = useState(false);
+  
+  // Form data state
   const [formData, setFormData] = useState({
     email: "",
     password: ""
   });
+  
+  // UI state management
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  
+  // Router and Redux hooks
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
 
+  /**
+   * Handle back button click
+   * Navigate to previous page if available, otherwise go to home
+   */
   const handleBack = () => {
     // Check if there's a 'from' state (where user came from)
     const from = location.state?.from;
@@ -29,6 +54,10 @@ export default function Login() {
     }
   };
 
+  /**
+   * Handle form input changes
+   * Updates form data and clears any existing errors
+   */
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -37,6 +66,10 @@ export default function Login() {
     setError("");
   };
 
+  /**
+   * Handle form submission
+   * Authenticates user credentials and stores JWT token
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -44,6 +77,8 @@ export default function Login() {
 
     try {
       console.log('🔐 Attempting login to:', api.auth.login);
+      
+      // Send login request to backend API
       const response = await fetch(api.auth.login, {
         method: "POST",
         headers: {
@@ -58,13 +93,14 @@ export default function Login() {
         throw new Error(data.error || "Login failed");
       }
 
-      // Store in Redux and localStorage
+      // Store user data and JWT token in Redux and localStorage
+      // This will persist the session across page refreshes
       dispatch(setCredentials({
         user: data.user,
         token: data.token
       }));
 
-      // Redirect to dashboard
+      // Redirect to home/dashboard after successful login
       navigate("/");
     } catch (err) {
       setError(err.message);

@@ -1,3 +1,20 @@
+/**
+ * Users Management Page Component
+ * 
+ * Admin page for viewing and managing all platform users.
+ * Features:
+ * - Paginated user list with search functionality
+ * - Filter users by role (user, moderator, admin)
+ * - Display user statistics (total users, admins, active today)
+ * - Show user details including avatar, email, role, university, and review count
+ * - Responsive design with mobile-optimized cards view
+ * - Desktop table view for larger screens
+ * 
+ * Authentication:
+ * - Requires admin role
+ * - Uses JWT token for API requests
+ */
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiSearch } from 'react-icons/fi';
@@ -8,32 +25,49 @@ import { api } from '../../config/api';
 
 export default function Users() {
   const navigate = useNavigate();
+  
+  // User data state
   const [users, setUsers] = useState([]);
+  
+  // UI state management
   const [loading, setLoading] = useState(true);
+  
+  // Filter and search state
   const [searchTerm, setSearchTerm] = useState('');
   const [filterRole, setFilterRole] = useState('');
+  
+  // Pagination state
   const [pagination, setPagination] = useState({ total: 0, page: 1, pages: 0 });
 
+  // Fetch users when role filter changes
   useEffect(() => {
     fetchUsers();
   }, [filterRole]);
 
+  /**
+   * Fetch users from API with pagination, search, and filtering
+   * @param {number} page - Page number to fetch (default: 1)
+   */
   const fetchUsers = async (page = 1) => {
     try {
+      // Check authentication
       const token = localStorage.getItem('token');
       if (!token) {
         navigate('/login');
         return;
       }
 
+      // Build query parameters
       const params = new URLSearchParams({
         page: page.toString(),
         limit: '20'
       });
       
+      // Add optional filters
       if (searchTerm) params.append('search', searchTerm);
       if (filterRole) params.append('role', filterRole);
 
+      // Fetch users with authentication
       const response = await fetch(`${api.admin.users}?${params}`, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -50,11 +84,20 @@ export default function Users() {
     }
   };
 
+  /**
+   * Handle search form submission
+   * Triggers user fetch with current search term
+   */
   const handleSearch = (e) => {
     e.preventDefault();
     fetchUsers(1);
   };
 
+  /**
+   * Format date to readable format
+   * @param {string} date - ISO date string
+   * @returns {string} Formatted date (e.g., "Jan 15, 2024")
+   */
   const formatDate = (date) => {
     return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -63,6 +106,11 @@ export default function Users() {
     });
   };
 
+  /**
+   * Get appropriate badge color classes for user role
+   * @param {string} role - User role (admin, moderator, user)
+   * @returns {string} Tailwind CSS classes
+   */
   const getRoleBadgeColor = (role) => {
     switch (role) {
       case 'admin':

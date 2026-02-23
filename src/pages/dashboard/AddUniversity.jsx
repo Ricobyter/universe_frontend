@@ -1,3 +1,22 @@
+/**
+ * Add University Page Component
+ * 
+ * Page for adding a new university to the platform.
+ * Features:
+ * - Form-based university creation
+ * - Upload logo and campus images
+ * - Enter required and optional details
+ * - Quick link to bulk add functionality
+ * - Breadcrumb navigation
+ * 
+ * The actual form logic is encapsulated in the UniversityForm component
+ * which handles all the complex state management and API calls.
+ * 
+ * Authentication:
+ * - Requires admin role
+ * - Form submission uses JWT token
+ */
+
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import SideNavBar from "../../components/dashboard/SideNavBar";

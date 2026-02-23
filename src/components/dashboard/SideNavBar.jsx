@@ -25,11 +25,21 @@ export default function SideNavBar() {
         </Link>
         
         <div className="flex items-center gap-3 pb-4 border-b border-[#004F4F]">
-          <div
-            className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
-            style={{ backgroundImage: `url('https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.name || 'User'}')` }}
-            alt="User avatar"
-          ></div>
+          <div className="size-10 rounded-full overflow-hidden flex items-center justify-center">
+            {user?.userImageUrl ? (
+              <img
+                src={user.userImageUrl}
+                alt={user?.name || 'User'}
+                className="w-full h-full rounded-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full rounded-full bg-gradient-to-br from-[#00FF00] to-[#004F4F] flex items-center justify-center">
+                <span className="text-[#0B0C10] text-lg font-bold">
+                  {user?.name?.charAt(0).toUpperCase() || "U"}
+                </span>
+              </div>
+            )}
+          </div>
           <div className="flex flex-col">
             <h1 className="text-[#FFFFFF] text-sm font-medium leading-normal">
               {user?.name || 'User'}

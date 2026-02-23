@@ -1,10 +1,38 @@
+/**
+ * Search Results Page Component
+ * 
+ * Displays search results with filtering and sorting options.
+ * Features:
+ * - URL parameter-based search
+ * - Advanced filtering (country, type, state, rating)
+ * - Multiple sorting options
+ * - Pagination with page size control
+ * - Responsive grid layout
+ * - University cards with ratings
+ * 
+ * Query Parameters:
+ * - query: search term
+ * - page: current page number
+ * - Others: filters applied
+ * 
+ * Components:
+ * - FilterSidebar: Filter controls
+ * - ResultsHeader: Sort and results count
+ * - UniversityCard: Individual university display
+ * - Pagination: Page navigation
+ */
+
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import FilterSidebar from "../../components/searchResults/FilterSidebar";
 import { FaChevronRight, FaChevronLeft, FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
 import { api } from "../../config/api";
 
-// Stars component renders stars according to rating
+/**
+ * Stars component - Renders visual star rating
+ * @param {number} rating - Rating value (0-5)
+ * @returns Star icons with full, half, and empty states
+ */
 function Stars({ rating }) {
   const fullStars = Math.floor(rating);
   const hasHalfStar = rating % 1 >= 0.5;
@@ -23,7 +51,13 @@ function Stars({ rating }) {
   );
 }
 
-// Sort and results header
+/**
+ * Results header with title, count, and sort dropdown
+ * @param {string} searchTerm - Current search query
+ * @param {number} totalResults - Total number of results
+ * @param {string} sortBy - Current sort option
+ * @param {function} onSortChange - Sort change handler
+ */
 function ResultsHeader({ searchTerm, totalResults, sortBy, onSortChange }) {
   return (
     <div className="flex flex-wrap items-baseline justify-between gap-4 font-inter">
@@ -54,7 +88,11 @@ function ResultsHeader({ searchTerm, totalResults, sortBy, onSortChange }) {
   );
 }
 
-// Single university card component
+/**
+ * Single university card component
+ * Displays university info with logo, location, rating, and action button
+ * @param {object} university - University data object
+ */
 function UniversityCard({ university }) {
   const navigate = useNavigate();
   
