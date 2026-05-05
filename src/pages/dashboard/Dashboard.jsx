@@ -23,6 +23,7 @@ import ReviewsChart from "../../components/dashboard/dashboardStats/ReviewsChart
 import UserGrowthChart from "../../components/dashboard/dashboardStats/UserGrowthChart";
 import UniversitiesTable from "../../components/dashboard/dashboardStats/UniversitiesTable";
 import ReviewsTable from "../../components/dashboard/dashboardStats/ReviewsTable";
+import ChatbotSidebar from "../../components/dashboard/ChatbotSidebar";
 import { LiaUniversitySolid } from "react-icons/lia";
 import { api } from "../../config/api";
 
@@ -38,12 +39,13 @@ export default function Dashboard() {
   });
   
   // Chart data states
-  const [reviewsData, setReviewsData] = useState([]);
-  const [userGrowthData, setUserGrowthData] = useState([]);
+  const [_reviewsData, _setReviewsData] = useState([]);
+  const [_userGrowthData, _setUserGrowthData] = useState([]);
   
   // Recent data states
   const [recentReviews, setRecentReviews] = useState([]);
   const [recentUniversities, setRecentUniversities] = useState([]);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   
   // UI state management
   const [loading, setLoading] = useState(true);
@@ -102,8 +104,8 @@ export default function Dashboard() {
 
       // Update all state with fetched data
       setStats(statsData);
-      setReviewsData(reviewsChartData);
-      setUserGrowthData(userGrowthChartData);
+      _setReviewsData(reviewsChartData);
+      _setUserGrowthData(userGrowthChartData);
       setRecentReviews(reviewsListData);
       setRecentUniversities(universitiesListData);
       setLoading(false);
@@ -166,7 +168,7 @@ export default function Dashboard() {
    * @param {string} name - University name for confirmation message
    */
   const handleDeleteUniversity = async (id, name) => {
-    if (!window.confirm(`Are you sure you want to delete \"${name}\"? This action cannot be undone.`)) {
+    if (!window.confirm(`Are you sure you want to delete "${name}"? This action cannot be undone.`)) {
       return;
     }
 
@@ -208,7 +210,7 @@ export default function Dashboard() {
    * @param {string} title - Review title for confirmation message
    */
   const handleDeleteReview = async (id, title) => {
-    if (!window.confirm(`Are you sure you want to delete the review \"${title}\"? This action cannot be undone.`)) {
+    if (!window.confirm(`Are you sure you want to delete the review "${title}"? This action cannot be undone.`)) {
       return;
     }
 
@@ -245,8 +247,9 @@ export default function Dashboard() {
 
   return (
     <div className="flex min-h-screen w-full bg-[#0A0A0A] font-inter">
-      <SideNavBar />
-      <main className="flex-1 overflow-y-auto ml-64 bg-[#0A0A0A]">
+      <SideNavBar onOpenChat={() => setIsChatOpen(true)} />
+      <ChatbotSidebar isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
+      <main className={`flex-1 overflow-y-auto ml-64 bg-[#0A0A0A] transition-[margin-right] duration-300 ${isChatOpen ? 'mr-112' : 'mr-0'}`}>
 
 
         <div className="p-8">
@@ -260,7 +263,7 @@ export default function Dashboard() {
               <div className="text-gray-400 text-sm">{error}</div>
               <button 
                 onClick={fetchDashboardData}
-                className="mt-4 px-4 py-2 bg-[#00FF00] text-[#0B0C10] rounded-lg hover:bg-[#00dd00] font-medium transition"
+                className="mt-4 px-4 py-2 bg-[#00FF00] text-dark-black rounded-lg hover:bg-[#00dd00] font-medium transition"
               >
                 Retry
               </button>

@@ -8,8 +8,9 @@ import { MdOutlineRateReview } from "react-icons/md";
 import { IoMdSettings } from "react-icons/io";
 import { HiUsers } from "react-icons/hi";
 import { MdAnalytics } from "react-icons/md";
+import { RiRobot2Line } from "react-icons/ri";
 
-export default function SideNavBar() {
+export default function SideNavBar({ onOpenChat }) {
   const location = useLocation();
   const user = useSelector(selectCurrentUser);
   
@@ -110,6 +111,15 @@ export default function SideNavBar() {
             <MdAnalytics className="text-lg"/>
             <p className="text-sm font-medium leading-normal">Analytics</p>
           </Link> */}
+
+          <button
+            type="button"
+            onClick={onOpenChat}
+            className="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-[#B8FFB8] bg-[#00FF00]/10 hover:bg-[#00FF00]/20 hover:text-[#FFFFFF] border border-[#00FF00]/20"
+          >
+            <RiRobot2Line className="text-lg" />
+            <p className="text-sm font-medium leading-normal">Chatbot</p>
+          </button>
         </div>
       </div>
       

@@ -66,5 +66,10 @@ export const api = {
   verification: {
     sendCode: `${API_URL}/api/verification/send-code`,
     verifyCode: `${API_URL}/api/verification/verify-code`,
+  },
+
+  // Chatbot endpoints
+  chatbot: {
+    message: `${API_URL}/api/chatbot`,
   }
 };
