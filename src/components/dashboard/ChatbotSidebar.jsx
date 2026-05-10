@@ -80,7 +80,6 @@ export default function ChatbotSidebar({ isOpen, onClose }) {
             </span>
             <div>
               <h3 className="text-sm font-semibold text-white">Universe Chatbot</h3>
-              <p className="text-xs text-[#888888]">Groq-powered RAG assistant</p>
             </div>
           </div>
           <button
