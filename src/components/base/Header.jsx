@@ -1,10 +1,11 @@
 import { LiaUniversitySolid } from "react-icons/lia";
+import { RiRobot2Line } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectCurrentUser, selectIsAuthenticated, logout } from "../../store/userSlice";
 
-const Header = () => {
+const Header = ({ onOpenChat }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -32,6 +33,16 @@ const Header = () => {
           </h2>
         </div>
         <div className="hidden md:flex flex-1 justify-end gap-6 text-xs text-gray-500">
+          <button
+            type="button"
+            onClick={onOpenChat}
+            className="flex items-center gap-2 rounded-full border border-light-green/30 bg-light-green/10 px-3 py-2 text-light-green transition-colors hover:bg-light-green hover:text-black"
+            aria-label="Open chatbot"
+          >
+            <RiRobot2Line className="text-base" />
+            <span className="text-xs font-semibold">Chatbot</span>
+          </button>
+
           <div className="flex items-center ">
 
             <Link

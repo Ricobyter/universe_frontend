@@ -1,9 +1,11 @@
 
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { RiRobot2Line } from "react-icons/ri";
 import { loadUserFromStorage } from "./store/userSlice";
 import Header from "./components/base/Header";
+import ChatbotSidebar from "./components/dashboard/ChatbotSidebar";
 import Discover from "./pages/discover/Discover";
 import Signup from "./pages/auth/Signup";
 import Login from "./pages/auth/Login";
@@ -26,6 +28,7 @@ import SavedUniversities from "./pages/userProfile/SavedUniversities";
 function AppContent() {
   const location = useLocation();
   const dispatch = useDispatch();
+  const [isChatOpen, setIsChatOpen] = useState(false);
   
   // Load user from localStorage on app start
   useEffect(() => {
@@ -37,7 +40,17 @@ function AppContent() {
 
   return (
     <>
-      {showHeader && <Header />}
+      {showHeader && <Header onOpenChat={() => setIsChatOpen(true)} />}
+      <ChatbotSidebar isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
+      <button
+        type="button"
+        onClick={() => setIsChatOpen(true)}
+        className="fixed bottom-6 right-6 z-30 flex items-center gap-2 rounded-full border border-light-green/30 bg-black px-4 py-3 text-light-green shadow-lg shadow-black/40 transition-colors hover:bg-light-green hover:text-black"
+        aria-label="Open chatbot"
+      >
+        <RiRobot2Line className="text-xl" />
+        <span className="text-sm font-semibold">Chatbot</span>
+      </button>
       <Routes>
         <Route path="/" element={<Discover />} />
         <Route path="/signup" element={<Signup />} />
@@ -45,7 +58,7 @@ function AppContent() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/write-review" element={<WriteReviewPage />} />
         <Route path="/search" element={<SearchResultsPage/>} />
-        <Route path="/dashboard" element={<Dashboard/>} />
+        <Route path="/dashboard" element={<Dashboard onOpenChat={() => setIsChatOpen(true)} />} />
         <Route path="/dashboard/universities" element={<Universities/>} />
         <Route path="/dashboard/users" element={<Users/>} />
         <Route path="/dashboard/reviews" element={<Reviews/>} />

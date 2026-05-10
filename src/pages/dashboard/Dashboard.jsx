@@ -23,11 +23,10 @@ import ReviewsChart from "../../components/dashboard/dashboardStats/ReviewsChart
 import UserGrowthChart from "../../components/dashboard/dashboardStats/UserGrowthChart";
 import UniversitiesTable from "../../components/dashboard/dashboardStats/UniversitiesTable";
 import ReviewsTable from "../../components/dashboard/dashboardStats/ReviewsTable";
-import ChatbotSidebar from "../../components/dashboard/ChatbotSidebar";
 import { LiaUniversitySolid } from "react-icons/lia";
 import { api } from "../../config/api";
 
-export default function Dashboard() {
+export default function Dashboard({ onOpenChat }) {
   const navigate = useNavigate();
   
   // Platform statistics state
@@ -45,8 +44,6 @@ export default function Dashboard() {
   // Recent data states
   const [recentReviews, setRecentReviews] = useState([]);
   const [recentUniversities, setRecentUniversities] = useState([]);
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  
   // UI state management
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -247,9 +244,8 @@ export default function Dashboard() {
 
   return (
     <div className="flex min-h-screen w-full bg-[#0A0A0A] font-inter">
-      <SideNavBar onOpenChat={() => setIsChatOpen(true)} />
-      <ChatbotSidebar isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
-      <main className={`flex-1 overflow-y-auto ml-64 bg-[#0A0A0A] transition-[margin-right] duration-300 ${isChatOpen ? 'mr-112' : 'mr-0'}`}>
+      <SideNavBar onOpenChat={onOpenChat} />
+      <main className="flex-1 overflow-y-auto ml-64 bg-[#0A0A0A]">
 
 
         <div className="p-8">
